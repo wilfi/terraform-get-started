@@ -44,7 +44,6 @@ At the end you should have a vanilla latest Drupal instance up and running at th
 * Create a new Azure git repository in your Project.
 * Create a new git remote and set the newly created Azure repository as a remote. More info - https://learn.microsoft.com/en-us/azure/devops/repos/git/create-new-repo?view=azure-devops
 * Create a new Service Connection to AWS in Azure Devops with the access key and secret keys that you've generated earlier, and the AWS region. More info - https://learn.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops
-* Checkout to branch `azure-pipelines`
 * Configure bucket name and `backendServiceAWS` (Service Connection Name) in the "provider.tf" file and also in the "azure-pipelines.yml"
 * Commit and push the changes to the new git remote. You will see a new Pipeline triggered under `Pipelines`
 * The build will internally run `terraform plan` and `terraform apply` commands and will once again spin up all the earlier mentioned resources and install a vanilla Drupal.
