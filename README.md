@@ -1,6 +1,6 @@
 # README #
 
-This repository contains an example set of [Terraform](https://terraform.io) manifests for building a basic Drupal at AWS.
+This repository contains an example set of [Terraform](https://terraform.io) manifests for building a basic Drupal on AWS.
 
 ### What does it do? ###
 
