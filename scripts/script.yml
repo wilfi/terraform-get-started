@@ -38,7 +38,7 @@ ansible:
   package_name: ansible
   run_user: ansible
   pull:
-    url: "https://oauth2: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@github.com/wilfi/MyPlay.git"
+    url: "https://github.com/wilfi/MyPlay.git"
     playbook_name: drupal_setup/site.yml
 
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
