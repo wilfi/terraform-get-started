@@ -1,0 +1,44 @@
+package_update: true
+package_upgrade: true
+
+packages:
+  - git
+  - python3-pip
+# We are not going to install ansible on the node at the moment.
+#  - ansible
+
+# Add users to the system. Users are added after groups are added.
+# ssh_authorized_keys should be made secure.
+users:
+  - name: ansible
+    gecos: Ansible User
+    shell: /bin/bash
+    groups: users,admin,wheel,lxd
+    sudo: ALL=(ALL) NOPASSWD:ALL
+#    ssh_authorized_keys:
+#      - mysshkey
+
+write_files:
+  - path: ${script_path}
+    owner: ansible:ansible
+    permissions: '0755'
+    defer: true
+    content: |
+      #!/bin/bash
+      builtin cd ${drupal_path}
+      ./vendor/bin/drush -y si standard --account-name=admin --account-pass=admin --db-url=mysql://${drupal_username}:${drupal_password}@${rds_host}:${port}/${drupal_db_name}
+      ./vendor/bin/drush -y config-set system.performance js.preprocess 0
+      ./vendor/bin/drush -y config-set system.performance css.preprocess 0
+      sudo chown -R ansible.ansible ${drupal_public_files}
+      sudo chmod -R 777 ${drupal_public_files}
+
+# Pull the playbook and run it.
+ansible:
+  install_method: pip
+  package_name: ansible
+  run_user: ansible
+  pull:
+    url: "https://oauth2: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@github.com/wilfi/MyPlay.git"
+    playbook_name: drupal_setup/site.yml
+
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
