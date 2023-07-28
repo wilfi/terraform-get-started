@@ -1,3 +1,19 @@
+# Refer script.yml for clout-init template.
+data "template_file" "user_data" {
+  template = file("../scripts/script.yml")
+  depends_on = [aws_db_instance.drupal]
+  vars = {
+    script_path = "/var/lib/cloud/scripts/per-instance/drupal_composer_install.sh"
+    drupal_username = "${aws_db_instance.drupal.username}"
+    drupal_password = "drupalpwd"
+    rds_host = "${aws_db_instance.drupal.address}"
+    port = "${aws_db_instance.drupal.port}"
+    drupal_path = "/var/www/drupal"
+    drupal_public_files = "web/sites/default/files"
+    drupal_db_name = "${aws_db_instance.drupal.db_name}"
+  }
+}
+
 resource "aws_instance" "drupal" {
   # Image
   ami = data.aws_ami.ubuntu.id
@@ -13,46 +29,6 @@ resource "aws_instance" "drupal" {
   tags = {
     Name = "Drupal"
   }
-
-  provisioner "file" {
-    source      = "../scripts/setup.sh"
-    destination = "/tmp/setup.sh"
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      host        = self.public_dns
-      port        = 22
-      agent       = false
-      private_key = tls_private_key.drupal.private_key_pem
-      timeout     = "5m"
-    }
-  }
-  provisioner "file" {
-    source      = "../configs/vhosts.conf"
-    destination = "/tmp/vhosts.conf"
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      host        = self.public_dns
-      port        = 22
-      agent       = false
-      private_key = tls_private_key.drupal.private_key_pem
-      timeout     = "2m"
-    }
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /tmp/setup.sh",
-      "bash /tmp/setup.sh ${aws_db_instance.drupal.username}:drupalpwd@${aws_db_instance.drupal.address}:${aws_db_instance.drupal.port}/${aws_db_instance.drupal.name}"
-    ]
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      host        = self.public_dns
-      port        = 22
-      agent       = false
-      private_key = tls_private_key.drupal.private_key_pem
-      timeout     = "2m"
-    }
-  }
+  # User data for configuration.
+  user_data = data.template_file.user_data.rendered
 }
