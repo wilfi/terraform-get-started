@@ -15,8 +15,6 @@ users:
     shell: /bin/bash
     groups: users,admin,wheel,lxd
     sudo: ALL=(ALL) NOPASSWD:ALL
-#    ssh_authorized_keys:
-#      - mysshkey
 
 write_files:
   - path: ${script_path}
