@@ -20,8 +20,8 @@ stages:
                     provider: 'aws'
                     workingDirectory: terraform
                     command: 'init'
-                    backendServiceAWS: 'terraform-aws'
-                    backendAWSBucketName: 's3-terraform-state'
+                    backendServiceAWS: 'terraform-get-started'
+                    backendAWSBucketName: 'terraform-get-started'
                     backendAWSKey: 'terraform.tfstate'
 
                 - task: TerraformTaskV2@2
@@ -30,4 +30,4 @@ stages:
                     provider: 'aws'
                     workingDirectory: terraform
                     command: 'destroy'
-                    environmentServiceNameAWS: 'terraform-aws'
+                    environmentServiceNameAWS: 'terraform-get-started'

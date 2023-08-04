@@ -1,7 +1,7 @@
 terraform {
   required_version = ">= 1.2.0"
   backend "s3" {
-    bucket = "s3-terraform-state"
+    bucket = "terraform-get-started"
     key    = "terraform.tfstate"
   }
 }
