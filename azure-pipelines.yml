@@ -14,8 +14,8 @@ stages:
           provider: 'aws'
           workingDirectory: terraform
           command: 'init'
-          backendServiceAWS: 'terraform-aws'
-          backendAWSBucketName: 's3-terraform-state'
+          backendServiceAWS: 'terraform-get-started'
+          backendAWSBucketName: 'terraform-get-started'
           backendAWSKey: 'terraform.tfstate'
       - task: TerraformTaskV2@2
         displayName: 'validate'
@@ -43,8 +43,8 @@ stages:
                  provider: 'aws'
                  workingDirectory: terraform
                  command: 'init'
-                 backendServiceAWS: 'terraform-aws'
-                 backendAWSBucketName: 's3-terraform-state'
+                 backendServiceAWS: 'terraform-get-started'
+                 backendAWSBucketName: 'terraform-get-started'
                  backendAWSKey: 'terraform.tfstate'
 
              - task: TerraformTaskV2@2
@@ -53,11 +53,11 @@ stages:
                  provider: 'aws'
                  workingDirectory: terraform
                  command: 'plan'
-                 environmentServiceNameAWS: 'terraform-aws'
+                 environmentServiceNameAWS: 'terraform-get-started'
              - task: TerraformTaskV2@2
                displayName: 'apply'
                inputs:
                  provider: 'aws'
                  workingDirectory: terraform
                  command: 'apply'
-                 environmentServiceNameAWS: 'terraform-aws'
+                 environmentServiceNameAWS: 'terraform-get-started'
